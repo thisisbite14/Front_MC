@@ -1,13 +1,11 @@
-// src/api.js
-// ถ้ามี VITE_API_BASE ให้ใช้; ถ้าไม่มีก็ใช้ path relative ("")
-const RAW_BASE = (import.meta.env.VITE_API_BASE ?? "").trim();
-// ถ้า set เป็น "http://localhost:3000" จะกลายเป็น cross-origin (คุกกี้ไม่ถูกส่ง)
-const API_BASE = RAW_BASE || ""; // => เรียก /api/... ตรง ๆ
+import axios from 'axios';
 
-export default {
-  BASE: API_BASE,
-  withCreds: {
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-  },
-};
+const api = axios.create({
+  // 1. เปลี่ยนจาก 'localhost' มาใช้ Environment Variable
+  baseURL: import.meta.env.VITE_API_BASE_URL, 
+  
+  // 2. (สำคัญมาก) เพิ่มบรรทัดนี้เข้าไป
+  withCredentials: true, 
+});
+
+export default api;ไ
