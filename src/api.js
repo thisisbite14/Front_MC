@@ -1,15 +1,14 @@
-import axios from 'axios';
+// src/api.js
 
-// สร้าง Base URL โดยเช็คว่ามี Env Var หรือไม่
-// ถ้ามี (บน Vercel): ใช้ค่าจาก VITE_API_BASE_URL แล้วเติม /api ต่อท้าย
-// ถ้าไม่มี (ในเครื่อง): ใช้ http://localhost:3000/api
-const baseURL = import.meta.env.VITE_API_BASE_URL 
-  ? `${import.meta.env.VITE_API_BASE_URL}/api`
-  : 'http://localhost:3000/api';
+// 1. ดึง URL จาก Vercel (ถ้าไม่มีให้ใช้ localhost)
+// *สำคัญ* ไม่ต้องใส่ /api ต่อท้ายตรงนี้ เพราะในหน้าอื่นคุณใส่ /api ไว้แล้ว
+const BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
-const api = axios.create({
-  baseURL: baseURL,
-  withCredentials: true, // สำคัญมาก! เพื่อให้ส่ง Cookie/Session ได้
-});
-
-export default api;
+// 2. ส่งออกในรูปแบบ Object เหมือนเดิม เพื่อให้ Navbar.jsx และ Login.jsx ใช้งานได้
+export default {
+  BASE: BACKEND_URL,
+  withCreds: {
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  },
+};
